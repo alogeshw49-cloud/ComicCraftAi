@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ComicCraft — AI Comic Story Creator</title>
+  <meta name="description" content="Create personalized AI-powered comic stories with Google Gemini and Stable Diffusion. Enter your prompt and watch your comic come to life!" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body class="home-page">
+
+  <!-- ═══════════ ANIMATED BACKGROUND ═══════════ -->
+  <div class="bg-animation">
+    <div class="bg-dots"></div>
+    <div class="bg-gradient"></div>
+  </div>
+
+  <!-- ═══════════ HEADER ═══════════ -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">Comic<span class="logo-accent">Craft</span></span>
+      </div>
+      <nav class="header-nav">
+        <a href="/" class="nav-link active">Create</a>
+        <a href="/docs" class="nav-link" target="_blank">API Docs</a>
+        <a href="/test-image" class="nav-link">Test Image</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section class="hero">
+    <div class="hero-badge">✨ Powered by Google Gemini AI</div>
+    <h1 class="hero-title">
+      Create Your<br />
+      <span class="gradient-text">AI Comic Story</span>
+    </h1>
+    <p class="hero-subtitle">
+      Transform your imagination into a 5-panel comic masterpiece.<br />
+      Gemini writes the story. Stable Diffusion paints the world.
+    </p>
+    <div class="hero-chips">
+      <span class="chip">🎨 Multiple Art Styles</span>
+      <span class="chip">📖 5-Panel Stories</span>
+      <span class="chip">📄 PDF Export</span>
+      <span class="chip">🤖 Gemini Flash + Pro</span>
+    </div>
+  </section>
+
+  <!-- ═══════════ FORM CARD ═══════════ -->
+  <main class="main-container">
+    <div class="form-card" id="comic-form-card">
+      <div class="form-card-header">
+        <h2 class="form-card-title">
+          <span class="step-badge">🚀</span>
+          Build Your Comic
+        </h2>
+        <p class="form-card-subtitle">Fill in the details below to generate your personalized AI comic</p>
+      </div>
+
+      <form id="comicForm" action="/generate" method="POST" class="comic-form" novalidate>
+
+        <!-- Story Prompt -->
+        <div class="form-group full-width">
+          <label for="prompt" class="form-label">
+            <span class="label-icon">📝</span>
+            Story Prompt <span class="required">*</span>
+          </label>
+          <textarea
+            id="prompt"
+            name="prompt"
+            rows="3"
+            class="form-control form-textarea"
+            placeholder="e.g. A brave fox explores an enchanted forest filled with magical creatures and ancient secrets..."
+            required
+            minlength="5"
+            maxlength="1000"
+          ></textarea>
+          <div class="form-hint">Be creative! Describe the mood, conflict, and what makes your story unique.</div>
+          <div class="char-counter"><span id="promptCount">0</span>/1000</div>
+        </div>
+
+        <!-- Character Name -->
+        <div class="form-group">
+          <label for="character" class="form-label">
+            <span class="label-icon">🦸</span>
+            Main Character Name <span class="required">*</span>
+          </label>
+          <input
+            type="text"
+            id="character"
+            name="character"
+            class="form-control"
+            placeholder="e.g. Finn, Luna, Zara..."
+            required
+            maxlength="100"
+          />
+        </div>
+
+        <!-- Setting -->
+        <div class="form-group">
+          <label for="setting" class="form-label">
+            <span class="label-icon">🌍</span>
+            Setting / Location
+          </label>
+          <select id="setting" name="setting" class="form-control form-select">
+            <option value="forest" selected>🌲 Enchanted Forest</option>
+            <option value="school">🏫 School</option>
+            <option value="space">🚀 Outer Space</option>
+            <option value="city">🌆 Futuristic City</option>
+            <option value="ocean">🌊 Deep Ocean</option>
+            <option value="mountains">⛰️ Mountains</option>
+            <option value="desert">🏜️ Desert</option>
+            <option value="dungeon">⚔️ Dungeon</option>
+          </select>
+        </div>
+
+        <!-- Story Tone -->
+        <div class="form-group">
+          <label for="tone" class="form-label">
+            <span class="label-icon">🎭</span>
+            Story Tone
+          </label>
+          <select id="tone" name="tone" class="form-control form-select">
+            <option value="dramatic" selected>🎬 Dramatic</option>
+            <option value="funny">😂 Funny</option>
+            <option value="light-hearted">☀️ Light-Hearted</option>
+            <option value="poetic">🌸 Poetic</option>
+            <option value="suspenseful">😱 Suspenseful</option>
+            <option value="adventurous">⚔️ Adventurous</option>
+          </select>
+        </div>
+
+        <!-- Art Style -->
+        <div class="form-group">
+          <label class="form-label">
+            <span class="label-icon">🎨</span>
+            Art Style
+          </label>
+          <div class="style-grid">
+            <label class="style-card active" id="style-anime">
+              <input type="radio" name="art_style" value="anime" checked />
+              <span class="style-emoji">🌸</span>
+              <span class="style-name">Anime</span>
+            </label>
+            <label class="style-card" id="style-comic">
+              <input type="radio" name="art_style" value="comic book" />
+              <span class="style-emoji">💥</span>
+              <span class="style-name">Comic Book</span>
+            </label>
+            <label class="style-card" id="style-pixel">
+              <input type="radio" name="art_style" value="pixel art" />
+              <span class="style-emoji">🎮</span>
+              <span class="style-name">Pixel Art</span>
+            </label>
+            <label class="style-card" id="style-realistic">
+              <input type="radio" name="art_style" value="realistic" />
+              <span class="style-emoji">📸</span>
+              <span class="style-name">Realistic</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="form-group full-width submit-group">
+          <button type="submit" id="generateBtn" class="btn btn-primary btn-generate">
+            <span class="btn-icon">⚡</span>
+            <span class="btn-text">Generate My Comic</span>
+            <span class="btn-arrow">→</span>
+          </button>
+          <p class="submit-note">
+            ⏱️ Generation takes 1–3 minutes. Gemini AI is crafting your story + images.
+          </p>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- ═══════════ LOADING OVERLAY ═══════════ -->
+    <div class="loading-overlay" id="loadingOverlay" style="display:none;">
+      <div class="loading-card">
+        <div class="loading-animation">
+          <div class="comic-spinner">
+            <div class="spinner-panel sp1">✏️</div>
+            <div class="spinner-panel sp2">🎨</div>
+            <div class="spinner-panel sp3">📖</div>
+            <div class="spinner-panel sp4">⚡</div>
+          </div>
+        </div>
+        <h3 class="loading-title">Creating Your Comic</h3>
+        <div class="loading-steps">
+          <div class="loading-step active" id="step-outline">
+            <div class="step-dot"></div>
+            <span>📝 Generating story outline with Gemini Flash...</span>
+          </div>
+          <div class="loading-step" id="step-story">
+            <div class="step-dot"></div>
+            <span>📖 Writing narration with Gemini Pro...</span>
+          </div>
+          <div class="loading-step" id="step-images">
+            <div class="step-dot"></div>
+            <span>🎨 Creating illustrations with Stable Diffusion...</span>
+          </div>
+          <div class="loading-step" id="step-pdf">
+            <div class="step-dot"></div>
+            <span>📄 Compiling your comic PDF...</span>
+          </div>
+        </div>
+        <div class="loading-bar-container">
+          <div class="loading-bar" id="loadingBar"></div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ═══════════ HOW IT WORKS ═══════════ -->
+  <section class="how-it-works">
+    <h2 class="section-title">How ComicCraft Works</h2>
+    <div class="steps-grid">
+      <div class="step-item">
+        <div class="step-number">01</div>
+        <div class="step-icon">📝</div>
+        <h3>Describe Your Story</h3>
+        <p>Enter your comic idea, character name, setting, tone, and preferred art style.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step-item">
+        <div class="step-number">02</div>
+        <div class="step-icon">🤖</div>
+        <h3>AI Writes the Story</h3>
+        <p>Gemini Flash generates a 5-panel outline. Gemini Pro adds rich narration and dialogue.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step-item">
+        <div class="step-number">03</div>
+        <div class="step-icon">🎨</div>
+        <h3>AI Paints the World</h3>
+        <p>Stable Diffusion creates stunning comic-style illustrations for every panel.</p>
+      </div>
+      <div class="step-arrow">→</div>
+      <div class="step-item">
+        <div class="step-number">04</div>
+        <div class="step-icon">📄</div>
+        <h3>Download & Share</h3>
+        <p>Preview your comic online and download the professionally formatted PDF.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">Comic<span class="logo-accent">Craft</span></span>
+      </div>
+      <p class="footer-tagline">AI Comic Story Creator — Powered by Google Gemini + Stable Diffusion</p>
+      <p class="footer-copy">© 2024 ComicCraft AI. Built with FastAPI, Gemini, & ❤️</p>
+    </div>
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+</body>
+</html>

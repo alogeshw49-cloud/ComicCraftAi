@@ -1,0 +1,39 @@
+# ─────────────────────────────────────────────────────────
+# ComicCraft AI — Python Dependencies
+# Install with: pip install -r requirements.txt
+# ─────────────────────────────────────────────────────────
+
+# Web Framework
+fastapi==0.111.1
+uvicorn[standard]==0.30.1
+
+# Template engine & form parsing
+jinja2==3.1.4
+python-multipart==0.0.9
+
+# Google Gemini AI
+google-generativeai==0.7.2
+
+# HTTP requests & Hugging Face Inference API
+requests==2.32.3
+huggingface-hub>=0.28.0
+
+# Image processing
+Pillow==10.4.0
+
+# PDF generation
+fpdf2==2.7.9
+
+# Environment variable management
+python-dotenv==1.0.1
+
+# Higgsfield AI — video generation SDK
+higgsfield-client==0.2.0
+
+# ─── Optional: Local Stable Diffusion (GPU recommended) ───
+# Uncomment only if you want to run SD locally (requires ~5GB disk + GPU):
+# torch==2.3.1
+# diffusers==0.29.2
+# transformers==4.42.4
+# accelerate==0.31.0
+# xformers==0.0.27  # optional, for memory-efficient attention

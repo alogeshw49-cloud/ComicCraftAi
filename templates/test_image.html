@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Image Test — ComicCraft AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body class="preview-page">
+  <div class="bg-animation"><div class="bg-dots"></div><div class="bg-gradient"></div></div>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <a href="/" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:0.4rem;">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">Comic<span class="logo-accent">Craft</span></span>
+        </a>
+      </div>
+      <nav class="header-nav">
+        <a href="/" class="nav-link">← Home</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="success-main">
+    <div class="success-card">
+      <h1 class="success-title">🎨 Image Generation Test</h1>
+      <p class="success-subtitle"><strong>Prompt:</strong> {{ prompt }}</p>
+
+      {% if image_path %}
+      <div style="margin: 2rem 0; border-radius: 16px; overflow: hidden; border: 3px solid var(--gold);">
+        <img src="{{ image_path }}" alt="Test image" style="width:100%; max-width:512px; display:block; margin:0 auto;" />
+      </div>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">
+        ✅ Image generated at: <code>{{ image_path }}</code>
+      </p>
+      {% else %}
+        <p style="color: #ff4757;">⚠️ No image was generated.</p>
+      {% endif %}
+
+      <!-- Test different prompt -->
+      <form action="/test-image" method="GET" style="margin-top: 2rem; width:100%;">
+        <label style="display:block; margin-bottom:0.5rem; font-weight:700;">Test another prompt:</label>
+        <input type="text" name="img_prompt" value="{{ prompt }}"
+               style="width:100%; padding:0.75rem 1rem; border-radius:12px; border:2px solid var(--border-color); background:var(--card-bg); color:var(--text-primary); font-size:1rem; margin-bottom:1rem;"
+               placeholder="Enter an image prompt..." />
+        <button type="submit" class="btn btn-primary">🎨 Generate Test Image</button>
+      </form>
+
+      <a href="/" class="btn btn-secondary" style="margin-top: 1rem;">← Back to Home</a>
+    </div>
+  </main>
+</body>
+</html>

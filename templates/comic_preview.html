@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Your Comic — ComicCraft AI</title>
+  <meta name="description" content="View your AI-generated comic story with panels, illustrations, narration and download as PDF." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Comic+Neue:ital,wght@0,400;0,700;1,400&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body class="preview-page">
+
+  <!-- Animated background -->
+  <div class="bg-animation">
+    <div class="bg-dots"></div>
+    <div class="bg-gradient"></div>
+  </div>
+
+  <!-- ═══════════ HEADER ═══════════ -->
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <a href="/" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:0.4rem;">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">Comic<span class="logo-accent">Craft</span></span>
+        </a>
+      </div>
+      <nav class="header-nav">
+        <a href="/" class="nav-link">← Create New</a>
+        <a href="/docs" class="nav-link" target="_blank">API Docs</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ═══════════ COMIC HEADER ═══════════ -->
+  <section class="comic-hero">
+    <div class="comic-hero-badge">🎉 Your Comic is Ready!</div>
+    <h1 class="comic-hero-title">
+      <span class="gradient-text">AI-Generated Comic</span>
+    </h1>
+    <p class="comic-hero-sub">{{ layout | length }} panels • Powered by Gemini AI + Stable Diffusion</p>
+
+    <div class="comic-meta-chips">
+      {% if prompt %}
+        <span class="meta-chip">📝 {{ prompt[:60] }}{% if prompt|length > 60 %}...{% endif %}</span>
+      {% endif %}
+      {% if character %}
+        <span class="meta-chip">🦸 {{ character }}</span>
+      {% endif %}
+      {% if setting %}
+        <span class="meta-chip">🌍 {{ setting | capitalize }}</span>
+      {% endif %}
+      {% if tone %}
+        <span class="meta-chip">🎭 {{ tone | capitalize }}</span>
+      {% endif %}
+      {% if art_style %}
+        <span class="meta-chip">🎨 {{ art_style | capitalize }}</span>
+      {% endif %}
+    </div>
+  </section>
+
+  <!-- ═══════════ DOWNLOAD CTA ═══════════ -->
+  <div class="download-cta-bar">
+    <div class="download-cta-inner">
+      <span class="download-cta-text">📄 Your comic PDF is ready!</span>
+      {% if pdf_path %}
+        <a href="/download-pdf?pdf_path={{ pdf_path }}" class="btn btn-download" id="downloadBtn">
+          <span>⬇️ Download Comic PDF</span>
+        </a>
+      {% else %}
+        <span class="no-pdf-msg">PDF not available</span>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- ═══════════ COMIC PANELS ═══════════ -->
+  <main class="comic-main">
+    <div class="panels-container">
+
+      {% if layout %}
+        {% for panel in layout %}
+        <article class="panel-card" id="panel-{{ panel.panel_number }}" style="animation-delay: {{ (loop.index0 * 0.1) }}s">
+
+          <!-- Panel header -->
+          <div class="panel-header">
+            <div class="panel-badge">Panel {{ panel.panel_number }}</div>
+            <h2 class="panel-title">{{ panel.title }}</h2>
+          </div>
+
+          <!-- Panel body -->
+          <div class="panel-body">
+
+            <!-- Image column -->
+            <div class="panel-image-col">
+              <div class="panel-image-frame">
+                {% if panel.image_path %}
+                  <img
+                    src="{{ panel.image_path }}"
+                    alt="Panel {{ panel.panel_number }}: {{ panel.title }}"
+                    class="panel-image"
+                    loading="lazy"
+                    onerror="this.src='/static/img/placeholder.png'; this.alt='Image not available';"
+                  />
+                {% else %}
+                  <div class="panel-image-placeholder">
+                    <span class="placeholder-icon">🎨</span>
+                    <span>Image Generating...</span>
+                  </div>
+                {% endif %}
+              </div>
+
+              <!-- Image prompt tag -->
+              {% if panel.image_prompt %}
+              <div class="image-prompt-tag">
+                <span class="ipt-label">🖼️ Prompt:</span>
+                <span class="ipt-text">{{ panel.image_prompt[:120] }}{% if panel.image_prompt|length > 120 %}...{% endif %}</span>
+              </div>
+              {% endif %}
+            </div>
+
+            <!-- Story column -->
+            <div class="panel-story-col">
+
+              <!-- Scene description -->
+              {% if panel.scene_description %}
+              <div class="story-section scene-section">
+                <div class="story-section-label">
+                  <span class="section-icon">📍</span>
+                  <span>Scene</span>
+                </div>
+                <p class="scene-description"><em>{{ panel.scene_description }}</em></p>
+              </div>
+              {% endif %}
+
+              <!-- Caption -->
+              {% if panel.caption %}
+              <div class="story-section caption-section">
+                <div class="story-section-label">
+                  <span class="section-icon">💬</span>
+                  <span>Caption</span>
+                </div>
+                <p class="caption-text">{{ panel.caption }}</p>
+              </div>
+              {% endif %}
+
+              <!-- Narration -->
+              {% if panel.narration %}
+              <div class="story-section narration-section">
+                <div class="story-section-label">
+                  <span class="section-icon">📖</span>
+                  <span>Narration</span>
+                </div>
+                <p class="narration-text">{{ panel.narration }}</p>
+              </div>
+              {% endif %}
+
+            </div>
+          </div>
+
+        </article>
+        {% endfor %}
+
+      {% else %}
+        <div class="empty-state">
+          <div class="empty-icon">😕</div>
+          <h3>No panels generated</h3>
+          <p>Something went wrong during comic generation.</p>
+          <a href="/" class="btn btn-primary">← Try Again</a>
+        </div>
+      {% endif %}
+
+    </div>
+
+    <!-- ═══════════ BOTTOM ACTIONS ═══════════ -->
+    <div class="bottom-actions">
+      {% if pdf_path %}
+      <a href="/download-pdf?pdf_path={{ pdf_path }}" class="btn btn-download btn-lg">
+        ⬇️ Download Comic as PDF
+      </a>
+      {% endif %}
+      <a href="/" class="btn btn-secondary btn-lg">
+        ⚡ Create Another Comic
+      </a>
+    </div>
+
+  </main>
+
+  <!-- ═══════════ DOWNLOAD SUCCESS POPUP MODAL (GREEN PANEL) ═══════════ -->
+  <div class="download-modal-overlay" id="downloadSuccessModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="download-modal-card">
+      <button class="modal-close-btn" id="closeModalBtn" aria-label="Close modal">✕</button>
+
+      <!-- Vibrant Green Header Panel -->
+      <div class="modal-green-panel">
+        <div class="green-panel-glow"></div>
+        <div class="modal-icon-wrapper">
+          <svg class="modal-check-svg" viewBox="0 0 52 52">
+            <circle class="modal-check-circle" cx="26" cy="26" r="25" fill="none"/>
+            <path class="modal-check-path" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+          </svg>
+        </div>
+        <div class="modal-badge">✨ DOWNLOAD COMPLETE ✨</div>
+        <h2 class="modal-title" id="modalTitle">PDF Downloaded Successfully!</h2>
+        <p class="modal-subtitle">Your AI-generated comic masterpiece is saved to your device.</p>
+      </div>
+
+      <!-- Modal Body Content -->
+      <div class="modal-body-content">
+        <!-- Green Info Card -->
+        <div class="modal-file-box">
+          <div class="modal-file-icon">📄</div>
+          <div class="modal-file-details">
+            <div class="modal-file-name" id="modalFileName">{{ pdf_path.split('/')[-1] if pdf_path else 'comic_story.pdf' }}</div>
+            <div class="modal-file-meta">
+              <span class="meta-tag">✅ Multi-Page PDF</span>
+              <span class="meta-tag">🎨 AI Illustrated</span>
+              <span class="meta-tag">📖 Full Narration</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-perks-list">
+          <div class="modal-perk-item">
+            <span class="perk-check">✓</span>
+            <span>All {{ layout | length }} comic panels rendered in high resolution</span>
+          </div>
+          <div class="modal-perk-item">
+            <span class="perk-check">✓</span>
+            <span>Cover page, dialogues, and author captions included</span>
+          </div>
+          <div class="modal-perk-item">
+            <span class="perk-check">✓</span>
+            <span>Ready for printing, sharing, or digital reading</span>
+          </div>
+        </div>
+
+        <!-- Modal Actions Row -->
+        <div class="modal-actions-row">
+          <a href="/{{ pdf_path }}" target="_blank" class="btn btn-view-pdf" id="modalViewPdfBtn">
+            <span>👁️ Open / View PDF</span>
+          </a>
+          <a href="/download-pdf?pdf_path={{ pdf_path }}" class="btn btn-download-again" id="modalDownloadAgainBtn">
+            <span>⬇️ Download Again</span>
+          </a>
+        </div>
+
+        <div class="modal-footer-nav">
+          <a href="/" class="btn btn-primary btn-modal-create">
+            <span>⚡ Create Another Comic</span>
+          </a>
+          <button type="button" class="btn-modal-dismiss" id="dismissModalBtn">
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confetti container for celebratory animation -->
+  <div class="confetti-container" id="confetti"></div>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">⚡</span>
+        <span class="logo-text">Comic<span class="logo-accent">Craft</span></span>
+      </div>
+      <p class="footer-tagline">AI Comic Story Creator</p>
+      <p class="footer-copy">© 2024 ComicCraft AI</p>
+    </div>
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+</body>
+</html>

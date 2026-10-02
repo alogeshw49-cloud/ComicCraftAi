@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Export Successful — ComicCraft AI</title>
+  <meta name="description" content="Your AI-generated comic has been successfully exported as a PDF. Download and share your masterpiece!" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body class="success-page">
+
+  <div class="bg-animation">
+    <div class="bg-dots"></div>
+    <div class="bg-gradient"></div>
+  </div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <a href="/" style="text-decoration:none; color:inherit; display:flex; align-items:center; gap:0.4rem;">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">Comic<span class="logo-accent">Craft</span></span>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main class="success-main">
+    <div class="success-card">
+
+      <!-- Confetti animation -->
+      <div class="confetti-container" id="confetti"></div>
+
+      <!-- Success icon -->
+      <div class="success-icon-wrapper">
+        <div class="success-icon-circle">
+          <span class="success-icon">✅</span>
+        </div>
+        <div class="success-ring success-ring-1"></div>
+        <div class="success-ring success-ring-2"></div>
+      </div>
+
+      <h1 class="success-title">Comic Exported!</h1>
+
+      <p class="success-subtitle">
+        Your AI-powered comic has been<br />
+        <strong>successfully generated and saved</strong> as a PDF.
+      </p>
+
+      <!-- PDF info -->
+      {% if pdf_path %}
+      <div class="pdf-info-box">
+        <span class="pdf-icon">📄</span>
+        <div class="pdf-details">
+          <div class="pdf-label">Your Comic PDF</div>
+          <div class="pdf-path">{{ pdf_path.split('/')[-1] if pdf_path else 'comic.pdf' }}</div>
+        </div>
+        <a href="/download-pdf?pdf_path={{ pdf_path }}" class="btn btn-download">
+          ⬇️ Download Again
+        </a>
+      </div>
+      {% endif %}
+
+      <!-- What's in your comic -->
+      <div class="success-features">
+        <div class="success-feature">
+          <span class="sf-icon">📝</span>
+          <span class="sf-text">5 Story Panels</span>
+        </div>
+        <div class="success-feature">
+          <span class="sf-icon">🎨</span>
+          <span class="sf-text">AI Illustrations</span>
+        </div>
+        <div class="success-feature">
+          <span class="sf-icon">📖</span>
+          <span class="sf-text">Full Narration</span>
+        </div>
+        <div class="success-feature">
+          <span class="sf-icon">💬</span>
+          <span class="sf-text">Character Dialogue</span>
+        </div>
+      </div>
+
+      <!-- CTA -->
+      <a href="/" class="btn btn-primary btn-lg" id="createAnotherBtn">
+        ⚡ Go Create Another Comic
+      </a>
+
+      <p class="success-note">
+        Share your comic with friends and family!<br />
+        <small>Your PDF is saved in the <code>static/exports/</code> folder.</small>
+      </p>
+
+    </div>
+  </main>
+
+  <!-- ═══════════ DOWNLOAD SUCCESS POPUP MODAL (GREEN PANEL) ═══════════ -->
+  <div class="download-modal-overlay" id="downloadSuccessModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="download-modal-card">
+      <button class="modal-close-btn" id="closeModalBtn" aria-label="Close modal">✕</button>
+
+      <!-- Vibrant Green Header Panel -->
+      <div class="modal-green-panel">
+        <div class="green-panel-glow"></div>
+        <div class="modal-icon-wrapper">
+          <svg class="modal-check-svg" viewBox="0 0 52 52">
+            <circle class="modal-check-circle" cx="26" cy="26" r="25" fill="none"/>
+            <path class="modal-check-path" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+          </svg>
+        </div>
+        <div class="modal-badge">✨ DOWNLOAD COMPLETE ✨</div>
+        <h2 class="modal-title" id="modalTitle">PDF Downloaded Successfully!</h2>
+        <p class="modal-subtitle">Your AI-generated comic masterpiece is saved to your device.</p>
+      </div>
+
+      <!-- Modal Body Content -->
+      <div class="modal-body-content">
+        <!-- Green Info Card -->
+        <div class="modal-file-box">
+          <div class="modal-file-icon">📄</div>
+          <div class="modal-file-details">
+            <div class="modal-file-name" id="modalFileName">{{ pdf_path.split('/')[-1] if pdf_path else 'comic_story.pdf' }}</div>
+            <div class="modal-file-meta">
+              <span class="meta-tag">✅ Multi-Page PDF</span>
+              <span class="meta-tag">🎨 AI Illustrated</span>
+              <span class="meta-tag">📖 Full Narration</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-perks-list">
+          <div class="modal-perk-item">
+            <span class="perk-check">✓</span>
+            <span>All 5 comic panels rendered in high resolution</span>
+          </div>
+          <div class="modal-perk-item">
+            <span class="perk-check">✓</span>
+            <span>Cover page, dialogues, and author captions included</span>
+          </div>
+          <div class="modal-perk-item">
+            <span class="perk-check">✓</span>
+            <span>Ready for printing, sharing, or digital reading</span>
+          </div>
+        </div>
+
+        <!-- Modal Actions Row -->
+        <div class="modal-actions-row">
+          <a href="/{{ pdf_path }}" target="_blank" class="btn btn-view-pdf" id="modalViewPdfBtn">
+            <span>👁️ Open / View PDF</span>
+          </a>
+          <a href="/download-pdf?pdf_path={{ pdf_path }}" class="btn btn-download-again" id="modalDownloadAgainBtn">
+            <span>⬇️ Download Again</span>
+          </a>
+        </div>
+
+        <div class="modal-footer-nav">
+          <a href="/" class="btn btn-primary btn-modal-create">
+            <span>⚡ Create Another Comic</span>
+          </a>
+          <button type="button" class="btn-modal-dismiss" id="dismissModalBtn">
+            Done
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p class="footer-tagline">AI Comic Story Creator — Powered by Google Gemini + Stable Diffusion</p>
+      <p class="footer-copy">© 2024 ComicCraft AI</p>
+    </div>
+  </footer>
+
+  <script src="/static/js/main.js"></script>
+  <script>
+    // Launch confetti on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      launchConfetti();
+    });
+  </script>
+</body>
+</html>

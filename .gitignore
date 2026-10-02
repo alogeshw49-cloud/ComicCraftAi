@@ -1,0 +1,49 @@
+# ComicCraft AI — Git Ignore
+
+# Environment & secrets
+.env
+.env.*
+*.env
+*.env.local
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyc
+.Python
+venv/
+env/
+comiccraft-env/
+.venv/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Generated content (large files)
+static/panels/
+static/exports/
+*.png
+*.jpg
+*.jpeg
+*.pdf
+!static/img/placeholder.png
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Jupyter
+.ipynb_checkpoints/

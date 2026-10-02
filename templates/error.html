@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Error — ComicCraft AI</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body class="success-page">
+  <div class="bg-animation"><div class="bg-dots"></div><div class="bg-gradient"></div></div>
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="logo">
+        <a href="/" style="text-decoration:none;color:inherit;display:flex;align-items:center;gap:0.4rem;">
+          <span class="logo-icon">⚡</span>
+          <span class="logo-text">Comic<span class="logo-accent">Craft</span></span>
+        </a>
+      </div>
+    </div>
+  </header>
+  <main class="success-main">
+    <div class="success-card" style="border-color: #ff4757;">
+      <div class="success-icon-wrapper">
+        <div class="success-icon-circle" style="background: linear-gradient(135deg, #ff4757, #c0392b);">
+          <span class="success-icon">⚠️</span>
+        </div>
+      </div>
+      <h1 class="success-title" style="color: #ff4757;">Something Went Wrong</h1>
+      <p class="success-subtitle">
+        An error occurred while generating your comic.<br />
+        Please try again.
+      </p>
+      {% if error %}
+      <div class="error-detail">
+        <code>{{ error }}</code>
+      </div>
+      {% endif %}
+      <a href="/" class="btn btn-primary btn-lg">← Try Again</a>
+    </div>
+  </main>
+</body>
+</html>
