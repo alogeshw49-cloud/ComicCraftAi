@@ -90,22 +90,26 @@ def _generate_via_hf_api(prompt: str, output_path: str) -> bool:
 
     try:
         from huggingface_hub import InferenceClient
-        client = InferenceClient(api_key=HF_API_KEY)
+        client = InferenceClient(token=HF_API_KEY)
         for model_id in models_to_try:
-            try:
-                logger.info("Generating image with HF model: %s", model_id)
-                image = client.text_to_image(enhanced_prompt, model=model_id)
-                # Optimize size for comic panels and lightning-fast PDF compilation
-                if image.width > 768 or image.height > 768:
-                    image.thumbnail((768, 768), Image.Resampling.LANCZOS)
-                if image.mode != "RGB":
-                    image = image.convert("RGB")
-                image.save(output_path, "JPEG", quality=85, optimize=True)
-                logger.info("Image saved successfully to %s", output_path)
-                return True
-            except Exception as e:
-                logger.warning("InferenceClient error with %s: %s", model_id, e)
-                continue
+            for attempt in range(3):
+                try:
+                    logger.info("Generating image with HF model %s (attempt %d/3)...", model_id, attempt + 1)
+                    image = client.text_to_image(enhanced_prompt, model=model_id)
+                    # Optimize size for comic panels and lightning-fast PDF compilation
+                    if image.width > 768 or image.height > 768:
+                        image.thumbnail((768, 768), Image.Resampling.LANCZOS)
+                    if image.mode != "RGB":
+                        image = image.convert("RGB")
+                    image.save(output_path, "JPEG", quality=85, optimize=True)
+                    logger.info("Image saved successfully to %s", output_path)
+                    return True
+                except Exception as e:
+                    logger.warning("InferenceClient error with %s (attempt %d/3): %s", model_id, attempt + 1, e)
+                    if "429" in str(e) or "503" in str(e) or "rate" in str(e).lower() or "loading" in str(e).lower():
+                        time.sleep(2 * (attempt + 1))
+                        continue
+                    break
     except Exception as e:
         logger.error("HF InferenceClient error: %s", e)
 

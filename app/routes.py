@@ -33,9 +33,9 @@ templates = Jinja2Templates(directory="templates")
 
 
 def _generate_images_in_parallel(panels):
-    """Generate all comic panel illustrations simultaneously in parallel for maximum speed."""
+    """Generate all comic panel illustrations with concurrency control to prevent rate-limiting."""
     logger.info("Starting concurrent generation for %d panel images...", len(panels))
-    with ThreadPoolExecutor(max_workers=min(len(panels), 5)) as executor:
+    with ThreadPoolExecutor(max_workers=2) as executor:
         future_to_idx = {
             executor.submit(
                 generate_image,
